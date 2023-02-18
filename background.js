@@ -1,3 +1,5 @@
+
+
 chrome.runtime.onInstalled.addListener(async (tab) => {
   await chrome.action.setBadgeText({
     tabId: tab.id,
