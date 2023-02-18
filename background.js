@@ -58,15 +58,51 @@ chrome.action.onClicked.addListener(async (tab) => {
            * @returns {string}
            */
           function getStyles(element) {
-            // get the computed styles of the element
-            const styles = window.getComputedStyle(element);
+                // get the computed styles of the element
+            const computedStyles = getComputedStyle(element);
+            // get only the styles of the target element.
+            
+            const styles = element.style;
+            console.log(styles);
+            // get the classes of the element
+            const classes = element.classList;
+            console.log(classes);
+            // get the attributes of the element
+            const attributes = element.attributes;
+
+
+            // create an empty string to store the styles
             let styleString = "";
-            for (let i = 0; i < styles.length; i++) {
-              // add the style to the string if it is not a custom property and a default property
-              if (!styles[i].startsWith("--") && styles[i] !== "all") {
-                styleString += `${styles[i]}: ${styles.getPropertyValue(styles[i])}; `;
-              }
+
+            // loop through the computed styles and add them to the styleString
+            for (let i = 0; i < computedStyles.length; i++) {
+              const style = computedStyles[i];
+              styleString += `${style}: ${computedStyles.getPropertyValue(style)};`;
             }
+
+            // loop through the styles and add them to the styleString
+            for (let i = 0; i < styles.length; i++) {
+              const style = styles[i];
+              styleString += `${style}: ${styles.getPropertyValue(style)};`;
+            }
+
+            // loop through the classes and add them to the styleString
+            for (let i = 0; i < classes.length; i++) {
+              const className = classes[i];
+              styleString += `class: ${className};`;
+            }
+
+            // loop through the attributes and add them to the styleString
+            for (let i = 0; i < attributes.length; i++) {
+              const attribute = attributes[i];
+              styleString += `${attribute.name}: ${attribute.value};`;
+            }
+
+            // format the styleString by writing each style on a new line
+            styleString = styleString.replace(/;/g, ";\n");
+
+            // return the styleString
+            return styleString;
           }
 
           /**
@@ -80,17 +116,33 @@ chrome.action.onClicked.addListener(async (tab) => {
                 return element.outerHTML;
               }
               else if (isSingleClosing(element)) {
-                return element.outerHTML;
+
+
+               let html = element.outerHTML.replace(/style="[^"]*"/g, "").replace(/class="[^"]*"/g, "");
+                let children = element.children;
+                for (let i = 0; i < children.length; i++) {
+                  html = html.replace(children[i].outerHTML, getHTML(children[i]));
+                }
+                const formatted = html.replace(/></g, ">\n<");
+                return formatted.replace(/ style="[^"]*"/g, "").replace(/ class="[^"]*"/g, "");
+
               }
               return element.outerHTML;
             } else {
-              // return the HTML of the element with all the attributes
-              let html = element.outerHTML;
-              let children = element.children;
-              for (let i = 0; i < children.length; i++) {
-                html = html.replace(children[i].outerHTML, getHTML(children[i]));
-              }
-              return html;
+                
+                
+                let html = element.outerHTML.replace(/style="[^"]*"/g, "").replace(/class="[^"]*"/g, "");
+                let children = element.children;
+                for (let i = 0; i < children.length; i++) {
+                  html = html.replace(children[i].outerHTML, getHTML(children[i]));
+                }
+
+                // format the HTML code. This is not necessary but it makes it easier to read.
+                const formatted = html.replace(/></g, ">\n<");
+                // also remove the attributes of the formatted element by replacing the attributes with an empty string.
+                return formatted.replace(/ style="[^"]*"/g, "").replace(/ class="[^"]*"/g, "");
+
+
             }
           }
 
@@ -100,7 +152,9 @@ chrome.action.onClicked.addListener(async (tab) => {
 
             // get the HTML of the element
             const html = getHTML(event.target);
-            console.log("HTML: ", html);
+            const Styles = getStyles(event.target);
+            // console.log("HTML: ", html);
+            console.log("Styles: ", Styles);
 
           });
         });
@@ -116,3 +170,7 @@ chrome.action.onClicked.addListener(async (tab) => {
     });
   }
 });
+
+
+
+          
