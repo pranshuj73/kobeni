@@ -44,12 +44,27 @@ chrome.action.onClicked.addListener(async (tab) => {
 
           const elems = ['area', 'base', 'br', 'col', 'command', 'embed', 'hr', 'img', 'input', 'keygen', 'link', 'meta', 'param', 'source', 'track', 'wbr'];
           /**
-           * 
            * @param {HTMLElement} elem 
            * @returns {boolean}
            */
           function isSingleClosing(elem) {
             return elems.indexOf(elem.tagName.toLowerCase()) !== -1;
+          }
+
+          /**
+           * @param {HTMLElement} element
+           * @returns {string}
+           */
+          function getStyles(element) {
+            // get the computed styles of the element
+            const styles = window.getComputedStyle(element);
+            let styleString = "";
+            for (let i = 0; i < styles.length; i++) {
+              // add the style to the string if it is not a custom property and a default property
+              if (!styles[i].startsWith("--") && styles[i] !== "all") {
+                styleString += `${styles[i]}: ${styles.getPropertyValue(styles[i])}; `;
+              }
+            }
           }
 
           /**
