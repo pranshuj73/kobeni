@@ -153,7 +153,7 @@ chrome.action.onClicked.addListener(async (tab) => {
             // get the HTML of the element
             const html = getHTML(event.target);
             const Styles = getStyles(event.target);
-            // console.log("HTML: ", html);
+            console.log("HTML: ", html);
             console.log("Styles: ", Styles);
 
           });
