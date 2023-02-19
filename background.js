@@ -70,7 +70,9 @@ chrome.action.onClicked.addListener(async (tab) => {
                   }
                 }
               }
-              return styles;
+              //format the styles
+              const formatted = styles.replace(/}/g, "}\n");
+              return formatted;
 
 
 
