@@ -58,7 +58,7 @@ chrome.action.onClicked.addListener(async (tab) => {
            * @returns {string}
            */
           function getStyles(element) {
-                // write logic to get the stylesheet of the site and return the styles of the element.
+                
               
               let styles = "";
               let sheets = document.styleSheets;
