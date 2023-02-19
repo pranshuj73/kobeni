@@ -58,51 +58,22 @@ chrome.action.onClicked.addListener(async (tab) => {
            * @returns {string}
            */
           function getStyles(element) {
-                // get the computed styles of the element
-            const computedStyles = getComputedStyle(element);
-            // get only the styles of the target element.
-            
-            const styles = element.style;
-            console.log(styles);
-            // get the classes of the element
-            const classes = element.classList;
-            console.log(classes);
-            // get the attributes of the element
-            const attributes = element.attributes;
+                // write logic to get the stylesheet of the site and return the styles of the element.
+              
+              let styles = "";
+              let sheets = document.styleSheets;
+              for (let i = 0; i < sheets.length; i++) {
+                let rules = sheets[i].cssRules;
+                for (let j = 0; j < rules.length; j++) {
+                  if (element.matches(rules[j].selectorText)) {
+                    styles += rules[j].cssText;
+                  }
+                }
+              }
+              return styles;
 
 
-            // create an empty string to store the styles
-            let styleString = "";
 
-            // loop through the computed styles and add them to the styleString
-            for (let i = 0; i < computedStyles.length; i++) {
-              const style = computedStyles[i];
-              styleString += `${style}: ${computedStyles.getPropertyValue(style)};`;
-            }
-
-            // loop through the styles and add them to the styleString
-            for (let i = 0; i < styles.length; i++) {
-              const style = styles[i];
-              styleString += `${style}: ${styles.getPropertyValue(style)};`;
-            }
-
-            // loop through the classes and add them to the styleString
-            for (let i = 0; i < classes.length; i++) {
-              const className = classes[i];
-              styleString += `class: ${className};`;
-            }
-
-            // loop through the attributes and add them to the styleString
-            for (let i = 0; i < attributes.length; i++) {
-              const attribute = attributes[i];
-              styleString += `${attribute.name}: ${attribute.value};`;
-            }
-
-            // format the styleString by writing each style on a new line
-            styleString = styleString.replace(/;/g, ";\n");
-
-            // return the styleString
-            return styleString;
           }
 
           /**
