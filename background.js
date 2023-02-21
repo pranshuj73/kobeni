@@ -58,21 +58,21 @@ chrome.action.onClicked.addListener(async (tab) => {
            * @returns {string}
            */
           function getStyles(element) {
-                
-              
-              let styles = "";
-              let sheets = document.styleSheets;
-              for (let i = 0; i < sheets.length; i++) {
-                let rules = sheets[i].cssRules;
-                for (let j = 0; j < rules.length; j++) {
-                  if (element.matches(rules[j].selectorText)) {
-                    styles += rules[j].cssText;
-                  }
+
+
+            let styles = "";
+            let sheets = document.styleSheets;
+            for (let i = 0; i < sheets.length; i++) {
+              let rules = sheets[i].cssRules;
+              for (let j = 0; j < rules.length; j++) {
+                if (element.matches(rules[j].selectorText)) {
+                  styles += rules[j].cssText;
                 }
               }
-              //format the styles
-              const formatted = styles.replace(/}/g, "}\n");
-              return formatted;
+            }
+            //format the styles
+            const formatted = styles.replace(/}/g, "}\n");
+            return formatted;
 
 
 
@@ -91,7 +91,7 @@ chrome.action.onClicked.addListener(async (tab) => {
               else if (isSingleClosing(element)) {
 
 
-               let html = element.outerHTML.replace(/style="[^"]*"/g, "").replace(/class="[^"]*"/g, "");
+                let html = element.outerHTML.replace(/style="[^"]*"/g, "").replace(/class="[^"]*"/g, "");
                 let children = element.children;
                 for (let i = 0; i < children.length; i++) {
                   html = html.replace(children[i].outerHTML, getHTML(children[i]));
@@ -102,18 +102,18 @@ chrome.action.onClicked.addListener(async (tab) => {
               }
               return element.outerHTML;
             } else {
-                
-                
-                let html = element.outerHTML.replace(/style="[^"]*"/g, "").replace(/class="[^"]*"/g, "");
-                let children = element.children;
-                for (let i = 0; i < children.length; i++) {
-                  html = html.replace(children[i].outerHTML, getHTML(children[i]));
-                }
 
-                // format the HTML code. This is not necessary but it makes it easier to read.
-                const formatted = html.replace(/></g, ">\n<");
-                // also remove the attributes of the formatted element by replacing the attributes with an empty string.
-                return formatted.replace(/ style="[^"]*"/g, "").replace(/ class="[^"]*"/g, "");
+
+              let html = element.outerHTML.replace(/style="[^"]*"/g, "").replace(/class="[^"]*"/g, "");
+              let children = element.children;
+              for (let i = 0; i < children.length; i++) {
+                html = html.replace(children[i].outerHTML, getHTML(children[i]));
+              }
+
+              // format the HTML code. This is not necessary but it makes it easier to read.
+              const formatted = html.replace(/></g, ">\n<");
+              // also remove the attributes of the formatted element by replacing the attributes with an empty string.
+              return formatted.replace(/ style="[^"]*"/g, "").replace(/ class="[^"]*"/g, "");
 
 
             }
@@ -126,6 +126,7 @@ chrome.action.onClicked.addListener(async (tab) => {
             // get the HTML of the element
             const html = getHTML(event.target);
             const Styles = getStyles(event.target);
+            console.log("hello world");
             console.log("HTML: ", html);
             console.log("Styles: ", Styles);
 
@@ -146,4 +147,3 @@ chrome.action.onClicked.addListener(async (tab) => {
 
 
 
-          
